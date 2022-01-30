@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+en-core-sci-sm = {file = "https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.4.0/en_core_sci_sm-0.4.0.tar.gz"}
+transformers = "*"
+spacy = "*"
+torch = "*"
+sklearn = "*"
+gpustat = "*"
+setuptools = "*"
+scispacy = "*"
+pytest = "*"
+
+[requires]
+python_version = "3.7"

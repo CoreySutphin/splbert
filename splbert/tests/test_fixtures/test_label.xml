@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Label drug="ABILIFY MAINTENA" setid="ee49f3b1-1650-47ff-9fb1-ea53fe0b92b6">
+<Text></Text>
+<Sentences>
+<Sentence id="4362" LabelDrug="Accupril" section="34068-7">
+<SentenceText>To reduce the likelihood of hypotension, the diuretic should, if possible, be discontinued 2 to 3 days prior to beginning therapy with ACCUPRIL.</SentenceText>
+<Mention id="M14" type="Trigger" span="0 24" str="To reduce the likelihood"/>
+<Mention id="M15" type="Precipitant" span="45 8" str="diuretic" code="NO MAP"/>
+<Mention id="M16" type="SpecificInteraction" span="28 12" str="hypotension," code="45007003: Low blood pressure (disorder)"/>
+<Interaction id="I7" type="Pharmacodynamic interaction" trigger="M14" precipitant="M15" effect="M16"/>
+</Sentence>
+<Sentence id="2284" LabelDrug="ABILIFY MAINTENA" section="34073-7">
+<SentenceText>Strong CYP3A4 Inducers (e.g., carbamazepine) The concomitant use of oral aripiprazole and carbamazepine decreased the exposure of aripiprazole.</SentenceText>
+<Mention id="M17" type="Trigger" span="104 22" str="decreased the exposure"/>
+<Mention id="M18" type="Precipitant" span="30 13" str="carbamazepine" code="N0000007470"/>
+<Interaction id="I9" type="Pharmacokinetic interaction" trigger="M17" precipitant="M18" effect="C54356"/>
+</Sentence>
+</Sentences>
+<LabelInteractions><LabelInteraction type="Unspecified interaction" precipitant="cyp3a4 inducers" precipitantCode="N0000185506"/>
+<LabelInteraction type="Unspecified interaction" precipitant="cyp3a4 inhibitors" precipitantCode="N0000182141"/>
+<LabelInteraction type="Unspecified interaction" precipitant="cyp2d6 inhibitors" precipitantCode="N0000182135"/>
+<LabelInteraction type="Unspecified interaction" precipitant="cyp2d6 | inhibitors" precipitantCode="NONE"/>
+<LabelInteraction type="Pharmacokinetic interaction" precipitant="cyp2d6 inhibitor" precipitantCode="n0000182135" effect="C54355"/>
+<LabelInteraction type="Pharmacokinetic interaction" precipitant="strong cyp3a4 inhibitor" precipitantCode="n0000182141" effect="C54355"/>
+<LabelInteraction type="Pharmacokinetic interaction" precipitant="carbamazepine" precipitantCode="N0000007470" effect="C54356"/>
+<LabelInteraction type="Unspecified interaction" precipitant="carbamazepine" precipitantCode="N0000007470"/>
+<LabelInteraction type="Unspecified interaction" precipitant="inducers of cyp3a4" precipitantCode="n0000185506"/>
+<LabelInteraction type="Pharmacodynamic interaction" precipitant="antihypertensive agents" precipitantCode="N0000029427" effect="45007003: Low blood pressure (disorder)"/>
+<LabelInteraction type="Pharmacodynamic interaction" precipitant="benzodiazepines" precipitantCode="N0000007542" effect="17971005: Sedated (finding)"/>
+<LabelInteraction type="Pharmacodynamic interaction" precipitant="lorazepam" precipitantCode="NONE" effect="17971005: Sedated (finding)"/>
+<LabelInteraction type="Pharmacodynamic interaction" precipitant="lorazepam" precipitantCode="NONE" effect="28651003: Orthostatic hypotension (disorder)"/>
+<LabelInteraction type="Unspecified interaction" precipitant="alcohol" precipitantCode="N0000007432"/>
+<LabelInteraction type="Pharmacokinetic interaction" precipitant="fluoxetine" precipitantCode="01K63SUP8D" effect="C54357"/>
+<LabelInteraction type="Pharmacokinetic interaction" precipitant="paroxetine" precipitantCode="41VRH5220H" effect="C54358"/>
+<LabelInteraction type="Pharmacokinetic interaction" precipitant="norfluoxetine" precipitantCode="NONE" effect="C54357"/>
+
+</LabelInteractions></Label>
