@@ -7,13 +7,13 @@ verify_ssl = true
 
 [packages]
 en-core-sci-sm = {file = "https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.4.0/en_core_sci_sm-0.4.0.tar.gz"}
-transformers = "*"
-spacy = "*"
-torch = "*"
+transformers = "4.16.*"
+spacy = "3.0.*"
+torch = "1.10.*"
 sklearn = "*"
 gpustat = "*"
 setuptools = "*"
-scispacy = "*"
+scispacy = "0.4.*"
 pytest = "*"
 
 [requires]

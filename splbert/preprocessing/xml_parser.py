@@ -2,8 +2,14 @@
     Tools to parse out information from drug labels represented as XML documents.
     Used to process the annotated TAC Structured Product Labels(SPL) 2019 dataset.
 
+    1. Reads in Mentions and interactions from XML file.
+    2. Runs heuristics to clean up problematic mentions(mentions nested inside of each other, invalid spans, etc...)
+    3. Uses SpaCy to tokenize sentences and overlay Mentions onto them as BILUO labels
+    4. (???) Insert steps for Interaction processing
+    5. Writes the results to an output directory to be pre-processed into a BERT-tokenized dataset
+
     To Use:
-        python xml_parser.py xml-directory-path brat-directory-path --json --brat
+        python xml_parser.py input_path output_path
 """
 
 import sys
@@ -12,10 +18,10 @@ import spacy
 import json
 import warnings
 import xml.etree.ElementTree as ET
-from spacy.gold import biluo_tags_from_offsets, docs_to_json
+from spacy.training import offsets_to_biluo_tags
 
 
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load("en_core_sci_sm")
 
 
 def handle_parsing_errors(mentions):
@@ -69,14 +75,23 @@ def handle_parsing_errors(mentions):
 
 
 def parse_xml(file):
-    """Convert an XML file representing annotated drug labels to brat annotation format.
+    """Parse a drug label XML file into a list of Mentions and Interactions.
 
     Args:
-        file (string) - Path to the XML file to be converted
+        file (string) - Path to the XML file to be parsed
+
+    Returns:
+        (dict) - Dict of the form:
+            {
+                "filename": "",
+                "drug_name": "",
+                "mentions": [],
+                "interactions": [],
+            }
     """
     tree = ET.parse(file)
     root = tree.getroot()
-    drug_name = root.get("drug")
+    drug_name = root.attrib["drug"]
 
     sentences = []
     mentions = []
@@ -144,32 +159,10 @@ def parse_xml(file):
     return document
 
 
-# TODO - Fix this, broken since changing document["text"] to be a list of strings rather than a single string
-def convert_to_brat(documents, output_directory=""):
-    for document in documents:
-        # Construct a new .txt and .ann file for this document
-        document_filename = document["file_name"]
-        text_filename = os.path.join(
-            output_directory, document_filename.replace(".xml", ".txt")
-        )
-        ann_filename = os.path.join(
-            output_directory, document_filename.replace(".xml", ".ann")
-        )
-
-        with open(text_filename, "w+") as f:
-            f.write(document["sentences"])
-
-        with open(ann_filename, "w+") as f:
-            for (index, mention) in enumerate(document["mentions"]):
-                f.write(
-                    f"T{index + 1}\t{mention['type']} {mention['document_start']} {mention['document_end']}\t{mention['str']}\n"
-                )
-
-
 def convert_to_spacy_encodings(
     documents, output_directory="", mention_type="Precipitant"
 ):
-    incorrect_mentions = 0
+    misaligned_entities = 0
     counter = 1
     for document in documents:
         print(f"Converting file {counter}: {document['file_name']}")
@@ -192,19 +185,21 @@ def convert_to_spacy_encodings(
             entities = [
                 (mention["start"], mention["end"], mention["type"])
                 for mention in mention_sequence
-                if mention["type"] == mention_type
+                # if mention["type"] == mention_type
             ]
 
             doc = nlp(sentence["text"])
 
             try:
-                labels = biluo_tags_from_offsets(doc, entities)
+                labels = offsets_to_biluo_tags(doc, entities)
+                # IMPORTANT: Misaligned labels(denoted with a "-" are going to be ignored.)
+                misaligned_entities += len([label for label in labels if label == "-"])
+                labels = [label if label != "-" else "O" for label in labels]
                 token_sequences.append([str(token) for token in doc])
                 label_sequences.append(labels)
                 text_sequences.append(sentence)
             except ValueError as e:
                 print(f"Error in document: {document['file_name']}")
-                incorrect_mentions += 1
                 raise e
             # except Warning:
             #     print([token for token in doc])
@@ -218,27 +213,27 @@ def convert_to_spacy_encodings(
             "labels": label_sequences,
             "drug_name": document["drug_name"],
             "file_name": document["file_name"],
-            "sentences": sentences,
         }
 
         with open(file_name, "w+") as f:
             f.write(json.dumps(output))
 
         counter += 1
+    print(f"Number of misaligned entities: {misaligned_entities}")
 
 
-opts = [opt for opt in sys.argv[1:] if opt.startswith("-")]
-args = [arg for arg in sys.argv[1:] if not arg.startswith("-")]
+def main():
+    directory_name = sys.argv[1]
+    output_directory = sys.argv[2]
 
-directory_name = args[0]
-output_directory = args[1]
+    documents = []
+    for filename in os.listdir(directory_name):
+        document = parse_xml(os.path.join(directory_name, filename))
+        documents.append(document)
 
-documents = []
-for filename in os.listdir(directory_name):
-    document = parse_xml(os.path.join(directory_name, filename))
-    documents.append(document)
-
-if "--json" in opts:
+    # Convert XML docs to SpaCy encodings and write to output directory
     convert_to_spacy_encodings(documents, output_directory)
-elif "--brat" in opts:
-    convert_to_brat(documents, output_directory)
+
+
+if __name__ == "__main__":
+    main()

@@ -58,7 +58,7 @@ class Label(object):
     ]
 
     def __init__(self, drug):  # type: (str) -> ()
-        """ Creates a Label object to store annotations for the given drug
+        """Creates a Label object to store annotations for the given drug
 
         :param drug: Drug described by this Structured Product Label
         """
@@ -75,7 +75,7 @@ class Label(object):
         return self.drug
 
     def validate(self):  # type: () -> bool
-        """ Validates the annotations associated with this Structured Product Label
+        """Validates the annotations associated with this Structured Product Label
 
         :return: True if annotations are valid; False, otherwise.
         """
@@ -173,7 +173,7 @@ class Sentence(object):
     __slots__ = ["id_", "text"]
 
     def __init__(self, sentence_id, text):  # type: (str, str) -> ()
-        """ Representation of a sentence in a Structured Product Label
+        """Representation of a sentence in a Structured Product Label
 
         :param sentence_id: unique ID of the sentence
         :param text: content of the sentence
@@ -223,7 +223,7 @@ class Mention(object):
         code,  # type: Union[str, Set[str]]
         mention_str,  # type: str
     ):
-        """ Representations an annotation of a mention in a Structured Product Label sentence
+        """Representations an annotation of a mention in a Structured Product Label sentence
 
         :param sentence_id: UID of sentence containing this mention
         :param mention_id: UID of this mention
@@ -278,7 +278,7 @@ class Mention(object):
         )
 
     def validate(self, sentence=None):  # type: (Optional[Sentence]) -> bool
-        """ Validates this mention against the given sentence
+        """Validates this mention against the given sentence
 
         :param sentence: sentence containing this sentence
         :return: True, if this mention annotation is valid; False, otherwise.
@@ -353,7 +353,7 @@ class Interaction:
         precipitant,  # type: str
         effect,  # type: Optional[str]
     ):
-        """ Represents an annotation of a global or local interaction
+        """Represents an annotation of a global or local interaction
 
         :param type_: type of this interaction (i.e., 'Pharmacodynamic interaction', 'Unspecified interaction',
                       or 'Pharmacokinetic interaction'
@@ -368,7 +368,7 @@ class Interaction:
         )
 
     def validate(self):  # type: () -> bool
-        """ Validates that this is an internally-consistent interaction annotation
+        """Validates that this is an internally-consistent interaction annotation
 
         :return: True if this annotation is valid, False, otherwise
         """
@@ -408,7 +408,7 @@ class LocalInteraction(Interaction):
         effect=None,  # type: Optional[str]
         effect_code_match=None,  # type: Optional[str]
     ):
-        """ Represents an annotation of a local (sentence-level) interaction
+        """Represents an annotation of a local (sentence-level) interaction
 
         :param sentence_id: UID of sentence containing this interaction (if local)
         :param interaction_id: UID of this interaction (if local)
@@ -467,7 +467,7 @@ class GlobalInteraction(Interaction):
         precipitant_code="NO MAP",  # type: Union[str, Set[str]]
         effect=None,  # type: Optional[str]
     ):
-        """ Represents an annotation of a global (document-level) interaction
+        """Represents an annotation of a global (document-level) interaction
 
         :param type_: type of this interaction (i.e., 'Pharmacodynamic interaction', 'Unspecified interaction',
                       or 'Pharmacokinetic interaction'
@@ -506,7 +506,7 @@ class Results:
 
     def __init__(self, task1, task2, task3, task4, evaluate_triggers=False):
         # type: (bool, bool, bool, bool, bool) -> ()
-        """ Creates a Results object, for computing and storing the results of the specified TAC DDI tasks.
+        """Creates a Results object, for computing and storing the results of the specified TAC DDI tasks.
 
         :param task1: whether to evaluate Task 1
         :param task2: whether to evaluate Task 2
@@ -528,7 +528,7 @@ class Results:
         return self.tasks.__iter__()
 
     def evaluate_dirs(self, gold_dir, guess_dir):  # type: (str, str) -> ()
-        """ Evaluate the Structured Product Label (SPL) annotations int he given guess directory against those
+        """Evaluate the Structured Product Label (SPL) annotations int he given guess directory against those
         in the given gold directory
 
         :param gold_dir: path to directory containing gold SPL annotations
@@ -564,7 +564,7 @@ class Results:
             self._compare_files(gold_files[drug], guess_files[drug])
 
     def _compare_files(self, gold_file, guess_file):  # type: (str, str) -> ()
-        """ Compares the annotations in a single guess file to its gold standard annotations.
+        """Compares the annotations in a single guess file to its gold standard annotations.
         Both files are assumed to describe the same SPL.
 
         :param gold_file: path to gold-standard annotations
@@ -580,7 +580,7 @@ class Results:
 
 
 class Task(object):
-    """ Represents a Task evaluated in TAC DDI.
+    """Represents a Task evaluated in TAC DDI.
 
     First, call evaluate(...) on each pair of gold and guess labels to calculate the Confusion Matrix
 
@@ -590,7 +590,7 @@ class Task(object):
     __slots__ = ()
 
     def evaluate(self, gold_label, guess_label):  # type: (Label, Label) -> ()
-        """ Updates the results for this task based on the given gold-standard and guess-standard Labels
+        """Updates the results for this task based on the given gold-standard and guess-standard Labels
 
         :param gold_label: Label object containing gold-standard annotations
         :param guess_label: Label object containg guessed annotations
@@ -600,7 +600,7 @@ class Task(object):
         pass
 
     def print_results(self):  # type: () -> ()
-        """ Print results for this task (assumes evaluate has been called)
+        """Print results for this task (assumes evaluate has been called)
 
         :return: None
         """
@@ -608,7 +608,7 @@ class Task(object):
 
     @staticmethod
     def extract_mention(mention, use_type):  # type: (Mention, bool) -> str
-        """ Extracts a stringly-typed representation of this mention
+        """Extracts a stringly-typed representation of this mention
 
         The representation is of the form <sentence id>:<mention text>[:mention type]
 
@@ -748,7 +748,7 @@ class Task2(Task):
 
     @staticmethod
     def extract_relation_type(interaction):  # type: (LocalInteraction) -> str
-        """ Provides a string representation of an interaction based only on its type and sentence
+        """Provides a string representation of an interaction based only on its type and sentence
 
         Format: <sentence id>::<interaction type>
 
@@ -761,7 +761,7 @@ class Task2(Task):
     @staticmethod
     def calc_confusion_matrix_from_counts(gold_counts, guess_counts):
         # type: (Mapping[str, int], Mapping[str, int]) -> ConfusionMatrix
-        """ Computes a new Confusion Matrix based on the given set of gold and guess items (represented by strings)
+        """Computes a new Confusion Matrix based on the given set of gold and guess items (represented by strings)
 
         :param gold_counts: Counter of string objects representing gold-standard annotations
         :param guess_counts: Counter of string objects corresponding to guess annotations
@@ -911,7 +911,7 @@ class Task3(Task):
     def evaluate(self, gold_label, guess_label):
         def extract_code(m, use_sentence=False, use_surface=False):
             # type: (Mention, bool, bool) -> Union[str, AbstractSet[str]]
-            """ Creates a stringly-typed representation of a mention
+            """Creates a stringly-typed representation of a mention
 
             Format: [sentence_id][::][mention text][=]<mention code>
 
@@ -1018,7 +1018,7 @@ class Task4(Task):
     def evaluate(self, gold_label, guess_label):
         def extract_interaction(interaction, use_type):
             # type: (GlobalInteraction, bool) -> Union[AbstractSet[str], str]
-            """ Represents an interaction as either one or more string representations
+            """Represents an interaction as either one or more string representations
 
             We create a tuple of:
             - <precipitant_code OR precipitant if 'NO MAP'
@@ -1108,7 +1108,7 @@ class ConfusionMatrix:
     logger = logging.getLogger("tac.ddi.ConfusionMatrix")
 
     def __init__(self, tp=0, fp=0, fn=0, tn=0):  # type: (int, int, int, int) -> ()
-        """ Represents a Confusion Matrix for a binary classification task
+        """Represents a Confusion Matrix for a binary classification task
 
         :param tp: The number of true positives
         :param fp: The number of false positives
@@ -1162,7 +1162,7 @@ class ConfusionMatrix:
     def merge_confusion_matrices(
         cls, matrices
     ):  # type: (Iterable[ConfusionMatrix]) -> ConfusionMatrix
-        """ Creates a new Confusion Matrix as the combination of the given Confusion Matrices
+        """Creates a new Confusion Matrix as the combination of the given Confusion Matrices
 
         :param matrices: One or more confusion matrices to merge
         :return: new Confusion Matrix containing the summed elements of the given confusion matrices
@@ -1175,7 +1175,7 @@ class ConfusionMatrix:
     @classmethod
     def compute(cls, gold_set, guess_set, verbose=False):
         # type: (Set[Union[str, AbstractSet[str]]], AbstractSet[str], bool) -> ConfusionMatrix
-        """ Computes a new Confusion Matrix based on the given set of gold and guess items (represented by strings)
+        """Computes a new Confusion Matrix based on the given set of gold and guess items (represented by strings)
 
         :param gold_set: Set of string objects representing gold-standard annotations
         :param guess_set: Set of string objects corresponding to guess annotations
@@ -1256,7 +1256,7 @@ class ConfusionMatrix:
 
 
 def find_xml_files(directory):  # type: (str) -> Dict[str, Union[bytes, str]]
-    """ Returns all the XML files in a directory as a dict
+    """Returns all the XML files in a directory as a dict
 
     :param directory: directory to find XML files within
     :return: Dict of drug IDs to XML file names
@@ -1269,7 +1269,7 @@ def find_xml_files(directory):  # type: (str) -> Dict[str, Union[bytes, str]]
 
 
 def maybe_extract_code(code):  # type: (str) -> str
-    """ Some of the effects in the gold standard/training files are of the form "ID: description".
+    """Some of the effects in the gold standard/training files are of the form "ID: description".
 
     This method extracts the code portion, so teams are not penalized for omitting or using different descriptions.
     Also strips trailing and leading whitespace
@@ -1294,7 +1294,7 @@ def maybe_extract_code(code):  # type: (str) -> str
 
 def read_xml(file, allow_multiple_codes=False):
     # type: (Union[bytes, str], bool) -> Label
-    """ Creates the XML file at the given path, returning a Label object
+    """Creates the XML file at the given path, returning a Label object
 
     :param file: path to XML file containing SPL annotations
     :param allow_multiple_codes: whether the XML file is allowed to specify multiple codes per each mention
@@ -1390,7 +1390,7 @@ def read_xml(file, allow_multiple_codes=False):
 
 # Validates performance metrics, mainly just comparing the sections/text to make sure they're identical
 def check_files_match(gold_label, guess_label):  # type: (Label, Label) -> bool
-    """ Does simple sanity checks to ensure gold and guess labels match
+    """Does simple sanity checks to ensure gold and guess labels match
 
     :param gold_label: Label object containing gold-standard annotations
     :param guess_label: Label object containing guess annotations
@@ -1398,7 +1398,7 @@ def check_files_match(gold_label, guess_label):  # type: (Label, Label) -> bool
     """
     is_valid = True
 
-    if guess_label.drug != guess_label.drug:
+    if gold_label.drug != guess_label.drug:
         logger.error(
             "Gold label drug %s did not match guess label drug %s",
             gold_label.drug,
@@ -1432,7 +1432,7 @@ def check_files_match(gold_label, guess_label):  # type: (Label, Label) -> bool
 
 
 def print_f(name, matrix, primary=False):  # type: (str, ConfusionMatrix, bool) -> ()
-    """ Prints various numbers related to F-measure
+    """Prints various numbers related to F-measure
 
     :param name: Title to prin t
     :param matrix:
@@ -1449,7 +1449,7 @@ def print_f(name, matrix, primary=False):  # type: (str, ConfusionMatrix, bool) 
 def print_macro_f(
     matrices, primary=True
 ):  # type: (Sequence[ConfusionMatrix], bool) -> ()
-    """ # Prints various numbers related to macro F-measure
+    """# Prints various numbers related to macro F-measure
 
     :param matrices: One or more ConfusionMatrices to compute macro F-measure from
     :param primary: Whether the Macro-F1 measure for this set of confusion matrices is the primary metric
